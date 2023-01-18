@@ -6,9 +6,14 @@ const products = [
   {
     id: 2,
     name: "Traje de encolhimento",
-  }
+  },
 ];
+
+const newProductMock = {
+  name: "ProdutoX",
+};
 
 module.exports = {
   products,
+  newProductMock,
 };

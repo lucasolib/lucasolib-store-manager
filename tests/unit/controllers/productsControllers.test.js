@@ -42,23 +42,23 @@ describe('Testes de unidade do controller de produtos', function () {
       expect(res.json).to.have.been.calledWith('Server Error');
     });
 
-  // it('Deve retornar os status 200 e o passageiro pelo Id', async function () {
-  //   // arrange
-  //   const res = {};
-  //   const req = {
-  //     params: { id: 1 },
-  //   };
-  //   res.status = sinon.stub().returns(res);
-  //   res.json = sinon.stub().returns();
-  //   sinon
-  //     .stub(productsServices, 'findById')
-  //     .resolves({ type: null, message: products[0] });
-  //   // act
-  //   await productsControllers.getProductById(req, res);
-  //   // assert
-  //   expect(res.status).to.have.been.calledWith(200);
-  //   expect(res.json).to.have.been.calledWith(products[0]);
-  // });
+  it('Deve retornar os status 200 e o passageiro pelo Id', async function () {
+    // arrange
+    const res = {};
+    const req = {
+      params: { id: 1 },
+    };
+    res.status = sinon.stub().returns(res);
+    res.json = sinon.stub().returns();
+    sinon
+      .stub(productsServices, 'findById')
+      .resolves({ type: null, message: products[0] });
+    // act
+    await productsControllers.getProductById(req, res);
+    // assert
+    expect(res.status).to.have.been.calledWith(200);
+    expect(res.json).to.have.been.calledWith(products[0]);
+  });
   
   it("Deve retornar os status 404 caso não encontre o passageiro pelo ID", async function () {
     // arrange
