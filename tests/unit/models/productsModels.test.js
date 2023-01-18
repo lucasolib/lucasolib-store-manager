@@ -17,7 +17,7 @@ describe("Testes de unidade do model de produtos", function () {
 
   it("Recuperando um produto pelo ID", async function () {
     // Arrange
-    sinon.stub(connection, "execute").resolves([products[0]]);
+    sinon.stub(connection, "execute").resolves([products]);
     // Act
     const product = await productsModels.findById(1);
     // Assert

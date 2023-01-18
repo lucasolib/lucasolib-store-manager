@@ -41,7 +41,7 @@ describe("Testes de unidade do service de produtos", function () {
       const result = await productsServices.findById(9999);
       // assert
       expect(result.type).to.equal("PRODUCT_NOT_FOUND");
-      expect(result.message).to.equal('Product Not Found');
+      expect(result.message).to.equal('Product not found');
     });
 
   afterEach(function () {
