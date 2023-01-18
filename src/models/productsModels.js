@@ -12,7 +12,7 @@ const findById = async (productId) => {
     'SELECT * FROM products WHERE id = ?',
     [productId],
   );
-  return camelize(result);
+  return camelize(result[0]);
 };
 
 module.exports = {
