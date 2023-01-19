@@ -9,6 +9,14 @@ const products = [
   }
 ];
 
+const newProductMock = {
+  name: "produtoX",
+};
+
+const newProductMockWithId = { id: 3, ...newProductMock };
+
 module.exports = {
   products,
+  newProductMock,
+  newProductMockWithId,
 };
