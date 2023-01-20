@@ -1,4 +1,4 @@
-// const camelize = require('camelize');
+const camelize = require('camelize');
 // const snakeize = require('snakeize');
 const connection = require('./connection');
 
@@ -12,6 +12,26 @@ const registerSale = async (sale) => {
   ); return insertId;
 }; 
 
+const findAllSales = async () => {
+  const [result] = await connection.execute(
+    `SELECT id as sale_id, date, product_id, quantity FROM sales RIGHT JOIN sales_products
+    ON sales.id = sale_id`,
+  );
+  return camelize(result);
+};
+
+const findSaleById = async (saleId) => {
+  const [result] = await connection.execute(
+    `SELECT date, product_id, quantity FROM sales 
+    RIGHT JOIN sales_products
+    ON sales.id  = sales_products.sale_id
+    WHERE id = ${saleId}`,
+  );
+  return camelize(result);
+};
+
 module.exports = {
   registerSale,
+  findAllSales,
+  findSaleById,
 };

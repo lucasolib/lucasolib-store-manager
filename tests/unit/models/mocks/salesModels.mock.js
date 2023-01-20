@@ -1,41 +1,15 @@
 const allSalesMock = [
-  { id: 1,
-    itemsSold: [
-      {
-        productId: 1,
-        quantity: 2,
-      },
-      {
-        productId: 4,
-        quantity: 7,
-      },
-    ],
+  {
+    saleId: 1,
+    date: "2021-09-09T04:54:29.000Z",
+    productId: 1,
+    quantity: 2,
   },
   {
-    id: 2,
-    itemsSold: [
-      {
-        productId: 1,
-        quantity: 1,
-      },
-      {
-        productId: 2,
-        quantity: 4,
-      },
-    ],
-  },
-  {
-    id: 3,
-    itemsSold: [
-      {
-        productId: 1,
-        quantity: 1,
-      },
-      {
-        productId: 2,
-        quantity: 5,
-      },
-    ],
+    saleId: 1,
+    date: "2021-09-09T04:54:54.000Z",
+    productId: 2,
+    quantity: 2,
   },
 ];
 

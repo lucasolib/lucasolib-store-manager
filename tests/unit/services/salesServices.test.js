@@ -11,6 +11,7 @@ const {
   noIdSaleMock,
   invalidQuantityMock,
   invalidIdProductMock,
+  saleWithTimeMock,
 } = require('./mocks/salesServices.mock.js');
 
 describe('Testes de unidade do service de vendas', function () {
@@ -58,6 +59,44 @@ describe('Testes de unidade do service de vendas', function () {
       // assert
       expect(result.type).to.equal('PRODUCT_NOT_FOUND');
       expect(result.message).to.be.deep.equal('Product not found');
+    });
+  });
+
+  describe('Testes de cadastrar vendas', function () {
+    it('Lista todas as vendas', async function () {
+      // arrange
+      sinon.stub(salesModels, 'findAllSales').resolves(saleWithTimeMock);
+      // act
+      const result = await salesServices.findAllSales();
+      // assert
+      expect(result.type).to.be.equal(null);
+      expect(result.message).to.deep.equal(saleWithTimeMock);
+    });
+
+    it('Lista uma única venda pelo Id', async function () {
+      // arrange
+      sinon.stub(salesModels, 'findSaleById').resolves(saleWithTimeMock);
+      // act
+      const result = await salesServices.findSaleById(1);
+      // assert
+      expect(result.type).to.be.equal(null);
+      expect(result.message).to.deep.equal(saleWithTimeMock);
+    });
+
+    it('Retorna um erro caso Id não seja validado', async function () {
+      // act
+      const result = await salesServices.findSaleById('a');
+      // assert
+      expect(result.type).to.be.equal('INVALID_VALUE');
+      expect(result.message).to.deep.equal('"id" must be a number');
+    });
+
+    it('Retorna um erro caso Id não represente uma venda', async function () {
+      // act
+      const result = await salesServices.findSaleById(99);
+      // assert
+      expect(result.type).to.be.equal('SALE_NOT_FOUND');
+      expect(result.message).to.deep.equal('Sale not found');
     });
   });
 

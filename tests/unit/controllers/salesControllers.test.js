@@ -5,7 +5,11 @@ const { expect } = chai;
 chai.use(sinonChai);
 const { salesServices } = require('../../../src/services');
 const { salesControllers } = require('../../../src/controllers');
-const { fullSaleMock, bodyMock } = require('./mocks/salesControllers.mock.js');
+const {
+  fullSaleMock,
+  bodyMock,
+  saleWithTimeMock,
+} = require('./mocks/salesControllers.mock.js');
 
 describe('Testes de unidade do controller de vendas', function () {
   describe('Testes de cadastrar vendas', function () {
@@ -53,6 +57,76 @@ describe('Testes de unidade do controller de vendas', function () {
       expect(res.json).to.have.been.calledWith(
         { message: 'Product not found' }
       );
+    });
+  });
+
+  describe('Testes de listar vendas', function () {
+    it('Lista todas as vendas', async function () {
+      // arrange
+      const res = {};
+      const req = {};
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+      sinon
+        .stub(salesServices, 'findAllSales')
+        .resolves({ type: null, message: saleWithTimeMock });
+      // act
+      await salesControllers.listAllSales(req, res);
+      // assert
+      expect(res.status).to.have.been.calledWith(200);
+      expect(res.json).to.have.been.calledWith(saleWithTimeMock);
+    });
+
+    it('Retorna um erro caso Type chegue ao controller', async function () {
+      // arrange
+      const res = {};
+      const req = {};
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+      sinon
+        .stub(salesServices, 'findAllSales')
+        .resolves({ type: 'SYSTEM_ERROR', message: 'Server error' });
+      // act
+      await salesControllers.listAllSales(req, res);
+      // assert
+      expect(res.status).to.have.been.calledWith(500);
+      expect(res.json).to.have.been.calledWith('Server error');
+    });
+
+    it('Deve retornar os status 200 e a venda pelo Id', async function () {
+      // arrange
+      const res = {};
+      const req = {
+        params: { id: 1 },
+      };
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+      sinon
+        .stub(salesServices, 'findSaleById')
+        .resolves({ type: null, message: saleWithTimeMock });
+      // act
+      await salesControllers.getSaleById(req, res);
+      // assert
+      expect(res.status).to.have.been.calledWith(200);
+      expect(res.json).to.have.been.calledWith(saleWithTimeMock);
+    });
+
+    it('Deve retornar os status 200 e a venda pelo Id', async function () {
+      // arrange
+      const res = {};
+      const req = {
+        params: { id: 99 },
+      };
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+      sinon
+        .stub(salesServices, 'findSaleById')
+        .resolves({ type: 'SALE_NOT_FOUND', message: 'Sale not found' });
+      // act
+      await salesControllers.getSaleById(req, res);
+      // assert
+      expect(res.status).to.have.been.calledWith(404);
+      expect(res.json).to.have.been.calledWith({ message: 'Sale not found' });
     });
   });
 
