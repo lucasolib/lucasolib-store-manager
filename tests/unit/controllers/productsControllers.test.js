@@ -14,15 +14,15 @@ const {
   } = require('./mocks/productsControllers.mock.js');
 
 describe('Testes de unidade do controller de produtos', function () {
-  describe("Testes de recuperar produtos", function () {
-    it("Deve retornar o status 200 e a lista de produtos", async function () {
+  describe('Testes de recuperar produtos', function () {
+    it('Deve retornar o status 200 e a lista de produtos', async function () {
       // arrange
       const res = {};
       const req = {};
       res.status = sinon.stub().returns(res);
       res.json = sinon.stub().returns();
       sinon
-        .stub(productsServices, "findAll")
+        .stub(productsServices, 'findAll')
         .resolves({ type: null, message: products });
       // act
       await productsControllers.listProducts(req, res);
@@ -31,23 +31,23 @@ describe('Testes de unidade do controller de produtos', function () {
       expect(res.json).to.have.been.calledWith(products);
     });
 
-    it("Deve retornar o status 500 e a mensagem de erro caso não encontre nenhum produto", async function () {
+    it('Deve retornar o status 500 e a mensagem de erro caso não encontre nenhum produto', async function () {
       // arrange
       const res = {};
       const req = {};
       res.status = sinon.stub().returns(res);
       res.json = sinon.stub().returns();
       sinon
-        .stub(productsServices, "findAll")
-        .resolves({ type: 500, message: "Server Error" });
+        .stub(productsServices, 'findAll')
+        .resolves({ type: 500, message: 'Server Error' });
       // act
       await productsControllers.listProducts(req, res);
       // assert
       expect(res.status).to.have.been.calledWith(500);
-      expect(res.json).to.have.been.calledWith("Server Error");
+      expect(res.json).to.have.been.calledWith('Server Error');
     });
 
-    it("Deve retornar os status 200 e o produto pelo Id", async function () {
+    it('Deve retornar os status 200 e o produto pelo Id', async function () {
       // arrange
       const res = {};
       const req = {
@@ -56,7 +56,7 @@ describe('Testes de unidade do controller de produtos', function () {
       res.status = sinon.stub().returns(res);
       res.json = sinon.stub().returns();
       sinon
-        .stub(productsServices, "findById")
+        .stub(productsServices, 'findById')
         .resolves({ type: null, message: products[0] });
       // act
       await productsControllers.getProductById(req, res);
@@ -65,7 +65,7 @@ describe('Testes de unidade do controller de produtos', function () {
       expect(res.json).to.have.been.calledWith(products[0]);
     });
 
-    it("Deve retornar os status 404 caso não encontre o produto pelo ID", async function () {
+    it('Deve retornar os status 404 caso não encontre o produto pelo ID', async function () {
       // arrange
       const res = {};
       const req = {
@@ -74,19 +74,19 @@ describe('Testes de unidade do controller de produtos', function () {
       res.status = sinon.stub().returns(res);
       res.json = sinon.stub().returns();
       sinon
-        .stub(productsServices, "findById")
-        .resolves({ type: "PRODUCT_NOT_FOUND", message: "Product not found" });
+        .stub(productsServices, 'findById')
+        .resolves({ type: 'PRODUCT_NOT_FOUND', message: 'Product not found' });
       // act
       await productsControllers.getProductById(req, res);
       // assert
       expect(res.status).to.have.been.calledWith(404);
       expect(res.json).to.have.been.calledWith({
-        message: "Product not found",
+        message: 'Product not found',
       });
     });
 
-    describe("Testes de cadastrar produtos", function () {
-      it("Ao enviar um nome válido, deve cadastrar o produto", async function () {
+    describe('Testes de cadastrar produtos', function () {
+      it('Ao enviar um nome válido, deve cadastrar o produto', async function () {
         // arrange
         const res = {};
         const req = {
@@ -95,7 +95,7 @@ describe('Testes de unidade do controller de produtos', function () {
         res.status = sinon.stub().returns(res);
         res.json = sinon.stub().returns();
         sinon
-          .stub(productsServices, "registerProduct")
+          .stub(productsServices, 'registerProduct')
           .resolves({ type: null, message: newProductMockWithId });
         // act
         await productsControllers.createProduct(req, res);
@@ -104,7 +104,7 @@ describe('Testes de unidade do controller de produtos', function () {
         expect(res.json).to.have.been.calledWith(newProductMockWithId)
       });
 
-      it("Ao enviar um nome com menos de 5 caracteres, gera um erro", async function () {
+      it('Ao enviar um nome com menos de 5 caracteres, gera um erro', async function () {
         // arrange
         const res = {};
         const req = {
@@ -115,9 +115,9 @@ describe('Testes de unidade do controller de produtos', function () {
         res.status = sinon.stub().returns(res);
         res.json = sinon.stub().returns();
         sinon
-          .stub(productsServices, "registerProduct")
+          .stub(productsServices, 'registerProduct')
           .resolves({
-            type: "INVALID_VALUE",
+            type: 'INVALID_VALUE',
             message: '"name" length must be at least 5 characters long',
           });
         // act

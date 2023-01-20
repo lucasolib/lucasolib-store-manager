@@ -26,10 +26,10 @@ describe('Testes de unidade do model de produtos', function () {
     });
   });
 
-  describe("Testes de cadastrar produtos", function () {
-    it("Cadastrando um novo produto", async function () {
+  describe('Testes de cadastrar produtos', function () {
+    it('Cadastrando um novo produto', async function () {
       // Arrange
-      sinon.stub(connection, "execute").resolves([{ insertId: 3 }]);
+      sinon.stub(connection, 'execute').resolves([{ insertId: 3 }]);
       // Act
       const newProduct = await productsModels.registerProduct(newProductMock);
       // Assert
