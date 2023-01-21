@@ -12,17 +12,14 @@ const fullSaleMock = {
   ],
 };
 
-const bodyMock =
-  [
-    {
+const bodyMock = [{
       productId: 1,
       quantity: 2,
     },
     {
       productId: 4,
       quantity: 7,
-    },
-  ];
+    }];
 
   const saleWithTimeMock = [
     {
@@ -52,9 +49,25 @@ const saleWithoutIdMock = [
   },
 ];
 
+const updatedSaleMock = {
+  saleId: 1,
+  itemsUptaded: [
+    {
+      productId: 1,
+      quantity: 2,
+    },
+    {
+      productId: 4,
+      quantity: 7,
+    },
+  ]
+};
+
+
 module.exports = {
   fullSaleMock,
   bodyMock,
   saleWithTimeMock,
   saleWithoutIdMock,
+  updatedSaleMock,
 };

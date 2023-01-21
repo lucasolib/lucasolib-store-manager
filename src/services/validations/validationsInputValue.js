@@ -24,7 +24,7 @@ const validateNewProduct = (name) => {
   } return { type: null, message: '' };
 };
 
-const validateNewSale = (sales) => {
+const validateNewSale = (sales, productsList) => {
   const saleError = sales.map((sale) => verifySaleSchema.validate(sale));
   if (saleError.some((sale) => sale.error)) {
     const { error } = saleError.find((sale) => sale.error);
@@ -32,7 +32,26 @@ const validateNewSale = (sales) => {
       type: error.message.includes('required') ? 'UNDEFINED_VALUE' : 'INVALID_VALUE',
       message: error.message,
     };
+  } const productsIds = productsList.map(({ id }) => +id);
+  if (sales.some(({ productId }) => !productsIds.includes(productId))) {
+    return { type: 'PRODUCT_NOT_FOUND', message: 'Product not found' };
+  }
+  return { type: null, message: '' };
+};
+
+const validateSaleId = (sale, id) => {
+  const salesId = sale.map(({ saleId }) => saleId);
+  if (!salesId.includes(Number(id))) {
+    return { type: 'SALE_NOT_FOUND', message: 'Sale not found' };
   } return { type: null, message: '' };
+};
+
+const validateUptadeSale = (sales, productsList, salesList, salesId) => {
+  const firstError = validateNewSale(sales, productsList);
+  if (firstError.type) return firstError;
+  const secondError = validateSaleId(salesList, salesId);
+  if (secondError.type) return secondError;
+  return { type: null, message: '' };
 };
 
 module.exports = {
@@ -40,4 +59,5 @@ module.exports = {
   validateNewProduct,
   validateName,
   validateNewSale,
+  validateUptadeSale,
 };

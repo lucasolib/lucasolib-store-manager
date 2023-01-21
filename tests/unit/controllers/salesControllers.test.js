@@ -10,6 +10,7 @@ const {
   bodyMock,
   saleWithTimeMock,
   saleWithoutIdMock,
+  updatedSaleMock,
 } = require("./mocks/salesControllers.mock.js");
 
 describe('Testes de unidade do controller de vendas', function () {
@@ -131,48 +132,97 @@ describe('Testes de unidade do controller de vendas', function () {
     });
   });
 
-describe("Testes de deletar vendas", function () {
-  it("Deve retornar o status 200 caso a venda seja deletada", async function () {
-    // arrange
-    const res = {};
-    const req = {
-      params: {
-        id: 1,
-      },
-    };
-    res.status = sinon.stub().returns(res);
-    res.end = sinon.stub().returns();
-    sinon
-      .stub(salesServices, 'deleteSale')
-      .resolves({ type: null, message: saleWithoutIdMock });
-    // act
-    await salesControllers.deleteSale(req, res);
-    // assert
-    expect(res.status).to.have.been.calledWith(204);
+  describe("Testes de deletar vendas", function () {
+    it("Deve retornar o status 200 caso a venda seja deletada", async function () {
+      // arrange
+      const res = {};
+      const req = {
+        params: {
+          id: 1,
+        },
+      };
+      res.status = sinon.stub().returns(res);
+      res.end = sinon.stub().returns();
+      sinon
+        .stub(salesServices, 'deleteSale')
+        .resolves({ type: null, message: saleWithoutIdMock });
+      // act
+      await salesControllers.deleteSale(req, res);
+      // assert
+      expect(res.status).to.have.been.calledWith(204);
+    });
+
+    it("Deve retornar o status 404 e o erro de venda não encontrada", async function () {
+      // arrange
+      const res = {};
+      const req = {
+        params: {
+          id: 999,
+        },
+      };
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+      sinon
+        .stub(salesServices, "deleteSale")
+        .resolves({ type: "SALE_NOT_FOUND", message: "Sale not found" });
+      // act
+      await salesControllers.deleteSale(req, res);
+      // assert
+      expect(res.status).to.have.been.calledWith(404);
+      expect(res.json).to.have.been.calledWith({ message: "Sale not found" });
+    });
   });
 
-  it("Deve retornar o status 404 e o erro de venda não encontrada", async function () {
-    // arrange
-    const res = {};
-    const req = {
-      params: {
-        id: 999,
-      },
-    };
-    res.status = sinon.stub().returns(res);
-    res.json = sinon.stub().returns();
-    sinon
-      .stub(salesServices, "deleteSale")
-      .resolves({ type: "SALE_NOT_FOUND", message: "Sale not found" });
-    // act
-    await salesControllers.deleteSale(req, res);
-    // assert
-    expect(res.status).to.have.been.calledWith(404);
-    expect(res.json).to.have.been.calledWith({ message: "Sale not found" });
-  });
-});
+  describe('testes de atualizar vendas', function () {
+    it('Deve retornar o status 200 e a venda atualizada', async function () {
+      // arrange
+      const res = {};
+      const req = {
+        body: {
+          contentUpdate: bodyMock,
+        },
+        params: {
+          id: 1,
+        },
+      };
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+      sinon
+        .stub(salesServices, 'updateSale')
+        .resolves({ type: null, message: updatedSaleMock });
+      // act
+      await salesControllers.updateSale(req, res);
+      // assert
+      expect(res.status).to.have.been.calledWith(200);
+      expect(res.json).to.have.been.calledWith(updatedSaleMock);
+    });
 
+    it('Deve retornar erro 404 e a mensagem de venda não encontrada', async function () {
+      // arrange
+      const res = {};
+      const req = {
+        body: {
+          contentUpdate: bodyMock,
+        },
+        params: {
+          id: 999,
+        },
+      };
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+      sinon
+        .stub(salesServices, 'updateSale')
+        .resolves({ type: 'SALE_NOT_FOUND', message: 'Sale not found' });
+      // act
+      await salesControllers.updateSale(req, res);
+      // arrange
+      expect(res.status).to.have.been.calledWith(404);
+      expect(res.json).to.have.been.calledWith({ message: 'Sale not found' });
+    });
+  });
+  
   afterEach(function () {
     sinon.restore();
   });
 });
+

@@ -145,6 +145,21 @@ const saleWithoutIdMock = [
   },
 ];
 
+const updatedSaleMock =
+{
+  saleId: 1,
+    itemsUpdated: [
+      {
+        productId: 1,
+        quantity:2
+      },
+      {
+        productId: 2,
+        quantity:7
+      }
+    ]
+  
+  }
 
 module.exports = {
   allSalesMock,
@@ -157,4 +172,5 @@ module.exports = {
   invalidIdProductMock,
   saleWithTimeMock,
   saleWithoutIdMock,
+  updatedSaleMock,
 };

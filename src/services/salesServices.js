@@ -2,13 +2,10 @@ const { salesModels, productsModels } = require('../models');
 const schema = require('./validations/validationsInputValue');
 
 const registerSale = async (sale) => {
-  const error = schema.validateNewSale(sale);
-  if (error.type) return error;
   const allProducts = await productsModels.findAll();
-  const allProductsId = allProducts.map(({ id }) => +id);
-  if (sale.some(({ productId }) => !allProductsId.includes(productId))) {
-    return { type: 'PRODUCT_NOT_FOUND', message: 'Product not found' };
-  } const newSaleId = await salesModels.registerSale(sale);
+  const error = schema.validateNewSale(sale, allProducts);
+  if (error.type) return error;
+  const newSaleId = await salesModels.registerSale(sale);
   const newSale = {
     id: newSaleId,
     itemsSold: sale,
@@ -30,10 +27,28 @@ const findSaleById = async (saleId) => {
 };
 
 const deleteSale = async (saleId) => {
-    const sale = await salesModels.findSaleById(saleId);
-    if (!sale || sale.length === 0) return { type: 'SALE_NOT_FOUND', message: 'Sale not found' };
-    await salesModels.deleteSale(saleId);
-    return { type: null, message: sale };
+  const sale = await salesModels.findSaleById(saleId);
+  if (!sale || sale.length === 0) return { type: 'SALE_NOT_FOUND', message: 'Sale not found' };
+  await salesModels.deleteSale(saleId);
+  return { type: null, message: sale };
+};
+
+const updateSale = async (id, sales) => {
+  const allProducts = await productsModels.findAll();
+  const sale = await salesModels.findAllSales();
+  const error = schema.validateUptadeSale(
+    sales,
+    allProducts,
+    sale,
+    id,
+  );
+  if (error.type) return error;
+  await salesModels.updateSale(id, sales);
+  const updatedSale = {
+    saleId: id,
+    itemsUpdated: sales,
+  };
+  return { type: null, message: updatedSale };
 };
 
 module.exports = {
@@ -41,4 +56,5 @@ module.exports = {
   findAllSales,
   findSaleById,
   deleteSale,
+  updateSale,
 };
