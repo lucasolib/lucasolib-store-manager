@@ -180,6 +180,47 @@ describe('Testes de unidade do controller de produtos', function () {
     });
   });
 
+describe("Testes de deletar produtos", function () {
+  it("Deve retornar o status 200 caso produto seja deletado", async function () {
+    // arrange
+    const res = {};
+    const req = {
+      params: {
+        id: 1,
+      },
+    };
+    res.status = sinon.stub().returns(res);
+    res.end = sinon.stub().returns();
+    sinon
+      .stub(productsServices, "deleteProduct")
+      .resolves({ type: null, message: products[0] });
+    // act
+    await productsControllers.deleteProduct(req, res);
+    // assert
+    expect(res.status).to.have.been.calledWith(204);
+  });
+
+  it("Deve retornar o status 404 e o erro de produto não encontrado", async function () {
+    // arrange
+    const res = {};
+    const req = {
+      params: {
+        id: 999,
+      },
+    };
+    res.status = sinon.stub().returns(res);
+    res.json = sinon.stub().returns();
+    sinon
+      .stub(productsServices, "deleteProduct")
+      .resolves({ type: "PRODUCT_NOT_FOUND", message: "Product not found" });
+    // act
+    await productsControllers.deleteProduct(req, res);
+    // assert
+    expect(res.status).to.have.been.calledWith(404);
+    expect(res.json).to.have.been.calledWith({ message: "Product not found" });
+  });
+});
+
   afterEach(function () {
     sinon.restore();
   });

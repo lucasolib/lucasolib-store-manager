@@ -41,15 +41,26 @@ describe('Testes de unidade do model de produtos', function () {
     });
   });
 
-  describe('Testes de atualizar produtos', function () {
-    it('Atualizando um produto', async function () {
+  describe("Testes de atualizar produtos", function () {
+    it("Atualizando um produto", async function () {
       // Arrange
-      sinon.stub(connection, 'execute').resolves(productUpdateMock);
+      sinon.stub(connection, "execute").resolves(productUpdateMock);
       // Act
-      const result = await productsModels.updateProduct(1, 'Martelo do Batman');
+      const result = await productsModels.updateProduct(1, "Martelo do Batman");
       // Assert
       expect(result[0].affectedRows).to.be.deep.equal(1);
       expect(result[0].changedRows).to.be.deep.equal(1);
+    });
+  });
+
+  describe('Testes de deletar produtos', function () {
+    it('Deletando um produto', async function () {
+      // Arrange
+      sinon.stub(connection, 'execute').resolves({ affectedRows: 1 });
+      // Act
+      const result = await productsModels.deleteProduct(1);
+      // Assert
+      expect(result.affectedRows).to.be.deep.equal(1);
     });
   });
 

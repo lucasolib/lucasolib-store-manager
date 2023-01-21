@@ -130,6 +130,27 @@ describe('Testes de unidade do service de produtos', function () {
     });
   });
 
+  describe('Testes de deletar produtos', function () {
+    it('Deleta um produto', async function () {
+      // arrange
+      sinon.stub(productsModels, 'deleteProduct').resolves({ affectedRows: 1 });
+      sinon.stub(productsModels, 'findById').resolves(products[0]);
+      // act
+      const result = await productsServices.deleteProduct(1);
+      // assert
+      expect(result.type).to.equal(null);
+      expect(result.message).to.be.deep.equal(products[0]);
+    });
+
+    it('Gera um erro ao tentar deletar um produto inexistente', async function () {
+      // act
+      const result = await productsServices.deleteProduct(999);
+      // assert
+      expect(result.type).to.equal('PRODUCT_NOT_FOUND');
+      expect(result.message).to.be.deep.equal('Product not found');
+    });
+  });
+
   afterEach(function () {
     sinon.restore();
   });
