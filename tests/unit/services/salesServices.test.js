@@ -12,7 +12,8 @@ const {
   invalidQuantityMock,
   invalidIdProductMock,
   saleWithTimeMock,
-} = require('./mocks/salesServices.mock.js');
+  saleWithoutIdMock,
+} = require("./mocks/salesServices.mock.js");
 
 describe('Testes de unidade do service de vendas', function () {
   describe('Testes de cadastrar vendas', function () {
@@ -97,6 +98,29 @@ describe('Testes de unidade do service de vendas', function () {
       // assert
       expect(result.type).to.be.equal('SALE_NOT_FOUND');
       expect(result.message).to.deep.equal('Sale not found');
+    });
+  });
+
+  describe("Testes de deletar produtos", function () {
+    it("Deleta um produto", async function () {
+      // arrange
+      sinon
+        .stub(salesModels, "deleteSale")
+        .resolves({ affectedRows: 1 });
+      sinon.stub(salesModels, "findSaleById").resolves(saleWithoutIdMock);
+      // act
+      const result = await salesServices.deleteSale(1);
+      // assert
+      expect(result.type).to.equal(null);
+      expect(result.message).to.be.deep.equal(saleWithoutIdMock);
+    });
+
+    it("Gera um erro ao tentar deletar um produto inexistente", async function () {
+      // act
+      const result = await salesServices.deleteSale(999);
+      // assert
+      expect(result.type).to.equal("SALE_NOT_FOUND");
+      expect(result.message).to.be.deep.equal("Sale not found");
     });
   });
 

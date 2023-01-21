@@ -37,6 +37,17 @@ describe('Testes de unidade do model de vendas', function () {
     });
   });
 
+  describe("Testes de deletar vendas", function () {
+    it("Deletando uma venda", async function () {
+      // Arrange
+      sinon.stub(connection, "execute").resolves({ affectedRows: 1 });
+      // Act
+      const result = await salesModels.deleteSale(1);
+      // Assert
+      expect(result.affectedRows).to.be.deep.equal(1);
+    });
+  });
+
   afterEach(function () {
     sinon.restore();
   });
