@@ -66,7 +66,7 @@ describe('Testes de unidade do controller de produtos', function () {
       expect(res.json).to.have.been.calledWith(products[0]);
     });
 
-    it('Deve retornar os status 404 caso não encontre o produto pelo ID', async function () {
+    it("Deve retornar os status 404 caso não encontre o produto pelo ID", async function () {
       // arrange
       const res = {};
       const req = {
@@ -75,15 +75,52 @@ describe('Testes de unidade do controller de produtos', function () {
       res.status = sinon.stub().returns(res);
       res.json = sinon.stub().returns();
       sinon
-        .stub(productsServices, 'findById')
-        .resolves({ type: 'PRODUCT_NOT_FOUND', message: 'Product not found' });
+        .stub(productsServices, "findById")
+        .resolves({ type: "PRODUCT_NOT_FOUND", message: "Product not found" });
       // act
       await productsControllers.getProductById(req, res);
       // assert
       expect(res.status).to.have.been.calledWith(404);
       expect(res.json).to.have.been.calledWith({
-        message: 'Product not found',
+        message: "Product not found",
       });
+    });
+
+    it('Deve retornar o status 200 e os produtos buscados pela query', async function () {
+      // arrange
+      const res = {};
+      const req = {
+        query: { q: 'martelo' },
+      };
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+      sinon
+        .stub(productsServices, 'findByQuery')
+        .resolves({ type: null, message: products[0] });
+      // act
+      await productsControllers.findByQuery(req, res);
+      // assert
+      expect(res.status).to.have.been.calledWith(200);
+      expect(res.json).to.have.been.calledWith(products[0]);
+    });
+
+    it(`Deve retornar o status 200 e todos os produtos se não
+      existir um produto resultado da query`, async function () {
+      // arrange
+      const res = {};
+      const req = {
+        query: { q: 'todososprodutos' }
+      };
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+      sinon
+        .stub(productsServices, 'findByQuery')
+        .resolves({ type: null, message: products });
+      // act
+      await productsControllers.findByQuery(req, res);
+      // assert
+      expect(res.status).to.have.been.calledWith(200);
+      expect(res.json).to.have.been.calledWith(products);
     });
 
     describe('Testes de cadastrar produtos', function () {

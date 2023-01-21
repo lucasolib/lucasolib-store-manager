@@ -51,6 +51,26 @@ describe('Testes de unidade do service de produtos', function () {
       expect(result.type).to.equal('PRODUCT_NOT_FOUND');
       expect(result.message).to.equal('Product not found');
     });
+
+    it('retorna os produtos buscados por uma query', async function () {
+      // arrange
+      sinon.stub(productsModels, 'findByQuery').resolves(products[0]);
+      // act
+      const result = await productsServices.findByQuery('Martelo');
+      // assert
+      expect(result.type).to.be.equal(null);
+      expect(result.message).to.deep.equal(products[0]);
+    });
+
+    it('retorna todos os produtos se não encontrar nenhum pela query', async function () {
+      // arrange
+      sinon.stub(productsModels, "findByQuery").resolves(products);
+      // act
+      const result = await productsServices.findByQuery("Isso aqui é um teste");
+      // assert
+      expect(result.type).to.be.equal(null);
+      expect(result.message).to.deep.equal(products);
+    });
   });
 
   describe('Testes de cadastrar produtos', function () {

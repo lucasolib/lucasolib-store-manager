@@ -15,6 +15,14 @@ const findById = async (productId) => {
   return camelize(result[0]);
 };
 
+const findByQuery = async (query) => {
+  const [result] = await connection.execute(
+    `SELECT * FROM products
+    WHERE name LIKE ?;`, [`%${query}%`],
+  );
+  return camelize(result);
+};
+
 const registerProduct = async (newProduct) => {
   const [{ insertId }] = await connection.execute(
     'INSERT INTO products (name) VALUE(?)',
@@ -41,4 +49,5 @@ module.exports = {
   registerProduct,
   updateProduct,
   deleteProduct,
+  findByQuery,
 };

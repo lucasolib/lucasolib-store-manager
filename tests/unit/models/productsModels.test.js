@@ -28,6 +28,15 @@ describe('Testes de unidade do model de produtos', function () {
       // Assert
       expect(product).to.be.deep.equal(products[0]);
     });
+
+    it('Recuperando produtos por termo de busca', async function () {
+      // Arrange
+      sinon.stub(connection, 'execute').resolves([products[0]])
+      // Act
+      const product = await productsModels.findByQuery('martelo');
+      // Assert
+      expect(product).to.be.deep.equal(products[0]);
+    });
   });
 
   describe('Testes de cadastrar produtos', function () {
