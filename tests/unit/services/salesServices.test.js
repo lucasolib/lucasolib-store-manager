@@ -144,6 +144,14 @@ describe('Testes de unidade do service de vendas', function () {
       expect(result.type).to.equal('SALE_NOT_FOUND');
       expect(result.message).to.be.deep.equal('Sale not found');
     });
+
+    it("Gera um erro se a venda for atualizada com dados inapropriados", async function () {
+      // act
+      const result = await salesServices.updateSale(1, noQuantitySaleMock);
+      // assert
+      expect(result.type).to.equal("UNDEFINED_VALUE");
+      expect(result.message).to.be.deep.equal('"quantity" is required');
+    });
   });
 
   afterEach(function () {

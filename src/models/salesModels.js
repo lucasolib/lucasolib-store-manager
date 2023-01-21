@@ -39,20 +39,20 @@ const deleteSale = async (saleId) => {
 };
 
 const updateSale = async (id, sale) => {
-  const [deletedResult] = await connection.execute(
+  await connection.execute(
     'DELETE FROM sales_products WHERE sale_id = ?',
     [id],
   );
   const saleProducts = sale
     .map(({ productId, quantity }) => `(${id}, ${productId}, ${quantity})`)
     .join(', ');
-  await connection.execute(
-    `INSERT INTO StoreManager.sales_products
+  const updatedResult = await connection.execute(
+    `INSERT INTO sales_products
     (sale_id, product_id, quantity)
     VALUES
       ${saleProducts}`,
   );
-  return deletedResult;
+  return updatedResult;
 };
 
 module.exports = {

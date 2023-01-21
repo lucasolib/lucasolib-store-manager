@@ -51,12 +51,11 @@ describe('Testes de unidade do model de vendas', function () {
   describe("Testes de atualizar vendas", function () {
     it("Atualizando uma venda", async function () {
       // Arrange
-      sinon
-        .stub(connection, "execute")
+      sinon.stub(connection, 'execute')
         .onFirstCall()
         .resolves({ affectedRows: 2 })
         .onSecondCall()
-        .resolves({ affectedRows: 2 });
+        .resolves({ affectedRows: 2});
       // Act
       const result = await salesModels.updateSale(1, newSaleMock);
       // Assert
