@@ -11,7 +11,8 @@ const {
   products,
   newProductMock,
   newProductMockWithId,
-  } = require('./mocks/productsControllers.mock.js');
+  updatedProductMock,
+} = require("./mocks/productsControllers.mock.js");
 
 describe('Testes de unidade do controller de produtos', function () {
   describe('Testes de recuperar produtos', function () {
@@ -131,6 +132,53 @@ describe('Testes de unidade do controller de produtos', function () {
     });
   });
   
+  describe('Testes de atualizar produtos', function () {
+    it('Deve retornar o status 200 e o produto atualizado', async function () {
+      // arrange
+      const res = {};
+      const req = {
+        body: {
+          name: 'Martelo do Batman',
+        },
+        params: {
+          id: 1
+        },
+      };
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+      sinon
+        .stub(productsServices, 'updateProduct')
+        .resolves({ type: null, message: updatedProductMock });
+      // act
+      await productsControllers.updateProduct(req, res);
+      // assert
+      expect(res.status).to.have.been.calledWith(200);
+      expect(res.json).to.have.been.calledWith(updatedProductMock);
+    });
+
+    it("Deve retornar o status 404 e o erro de produto não encontrado", async function () {
+      // arrange
+      const res = {};
+      const req = {
+        body: {
+          name: "Martelo do Batman",
+        },
+        params: {
+          id: 999,
+        },
+      };
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+      sinon
+        .stub(productsServices, "updateProduct")
+        .resolves({ type: "PRODUCT_NOT_FOUND", message: "Product not found" });
+      // act
+      await productsControllers.updateProduct(req, res);
+      // assert
+      expect(res.status).to.have.been.calledWith(404);
+      expect(res.json).to.have.been.calledWith({ message: "Product not found" });
+    });
+  });
 
   afterEach(function () {
     sinon.restore();

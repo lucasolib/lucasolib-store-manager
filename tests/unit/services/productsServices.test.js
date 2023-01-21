@@ -3,7 +3,14 @@ const sinon = require('sinon');
 const { productsServices } = require('../../../src/services');
 const { productsModels } = require('../../../src/models');
 
-const { products, newProductMock, validName, invalidName } = require('./mocks/productsService.mock.js');
+const {
+  products,
+  newProductMock,
+  validName,
+  invalidName,
+  productUpdateMock,
+  updatedProductMock, 
+} = require('./mocks/productsService.mock.js');
 
 describe('Testes de unidade do service de produtos', function () {
   describe('Testes de recuperar produtos', function () {
@@ -78,7 +85,51 @@ describe('Testes de unidade do service de produtos', function () {
       );
     });
   });
-  
+
+  describe('Testes de atualizar produtos', function () {
+    it('Atualiza um produto', async function () {
+      // arrange
+      sinon.stub(productsModels, 'updateProduct').resolves(productUpdateMock);
+      sinon.stub(productsModels, 'findById').resolves(products[0]);
+      // act
+      const result = await productsServices.updateProduct(1, 'Martelo do Batman');
+      // assert
+      expect(result.type).to.equal(null);
+      expect(result.message).to.be.deep.equal(updatedProductMock);
+    });
+
+    it('Gera um erro ao tentar atualizar um produto inexistente', async function () {
+      // act
+      const result = await productsServices.updateProduct(
+        999,
+        "Martelo do Batman"
+      );
+      // assert
+      expect(result.type).to.equal('PRODUCT_NOT_FOUND');
+      expect(result.message).to.be.deep.equal('Product not found');
+    });
+
+    it("Gera um erro ao tentar atualizar um produto sem passar um nome", async function () {
+      // act
+      const result = await productsServices.updateProduct(
+        999,
+      );
+      // assert
+      expect(result.type).to.equal("INVALID_VALUE");
+      expect(result.message).to.be.deep.equal('"name" is required');
+    });
+
+    it("Gera um erro ao tentar atualizar um produto passando um nome inválido", async function () {
+      // act
+      const result = await productsServices.updateProduct(999 , 'oi');
+      // assert
+      expect(result.type).to.equal("INVALID_VALUE");
+      expect(result.message).to.be.deep.equal(
+        '"name" length must be at least 5 characters long'
+      );
+    });
+  });
+
   afterEach(function () {
     sinon.restore();
   });

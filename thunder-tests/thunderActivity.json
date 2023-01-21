@@ -33,31 +33,22 @@
     "tests": []
   },
   {
-    "_id": "4dc8a7e4-ffa9-4fd0-8a94-5da5f3cbf219",
+    "_id": "a7fbfde0-1a2e-4fcc-9e9b-f75316d3b413",
     "colId": "history",
     "containerId": "",
-    "name": "http://localhost:3000/sales/1",
-    "url": "http://localhost:3000/sales/1",
-    "method": "GET",
+    "name": "http://localhost:3000/products/1",
+    "url": "http://localhost:3000/products/1",
+    "method": "PUT",
     "sortNum": 0,
-    "created": "2023-01-20T15:34:53.564Z",
-    "modified": "2023-01-20T15:34:53.564Z",
+    "created": "2023-01-21T16:33:10.448Z",
+    "modified": "2023-01-21T16:33:10.448Z",
     "headers": [],
     "params": [],
-    "tests": []
-  },
-  {
-    "_id": "b83f31dc-0d22-49bc-8a80-783ec971ef90",
-    "colId": "history",
-    "containerId": "",
-    "name": "http://localhost:3000/sales/99",
-    "url": "http://localhost:3000/sales/99",
-    "method": "GET",
-    "sortNum": 0,
-    "created": "2023-01-20T16:20:08.417Z",
-    "modified": "2023-01-20T16:20:08.417Z",
-    "headers": [],
-    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"name\": \"martelo do batman\"\n}",
+      "form": []
+    },
     "tests": []
   }
 ]

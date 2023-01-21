@@ -15,8 +15,14 @@ const newProductMock = {
 
 const newProductMockWithId = { id: 3, ...newProductMock };
 
+const updatedProductMock = {
+  id: 1,
+  name: "Martelo do Batman",
+};
+
 module.exports = {
   products,
   newProductMock,
   newProductMockWithId,
+  updatedProductMock,
 };

@@ -3,7 +3,11 @@ const sinon = require('sinon');
 const { productsModels } = require('../../../src/models');
 
 const connection = require('../../../src/models/connection');
-const { products, newProductMock } = require('./mocks/productsModel.mock.js');
+const {
+  products,
+  newProductMock,
+  productUpdateMock,
+} = require("./mocks/productsModel.mock.js");
 
 describe('Testes de unidade do model de produtos', function () {
   describe('Testes de recuperar produtos', function () {
@@ -34,6 +38,18 @@ describe('Testes de unidade do model de produtos', function () {
       const newProduct = await productsModels.registerProduct(newProductMock);
       // Assert
       expect(newProduct).to.equal(3);
+    });
+  });
+
+  describe('Testes de atualizar produtos', function () {
+    it('Atualizando um produto', async function () {
+      // Arrange
+      sinon.stub(connection, 'execute').resolves(productUpdateMock);
+      // Act
+      const result = await productsModels.updateProduct(1, 'Martelo do Batman');
+      // Assert
+      expect(result[0].affectedRows).to.be.deep.equal(1);
+      expect(result[0].changedRows).to.be.deep.equal(1);
     });
   });
 
